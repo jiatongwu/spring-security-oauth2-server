@@ -9,9 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,5 +62,25 @@ public class UserController {
 		user.setPassword("password");
 		user.setUsername("tom");
 		return user;
+	}
+
+	@PutMapping("/{id:\\d+}")
+	public User updateUser(@PathVariable String id, @Valid @RequestBody User user, BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+
+			for (FieldError fieldError : fieldErrors) {
+				System.out.println(fieldError.getField());
+				System.out.println(fieldError.getDefaultMessage());
+				System.out.println(fieldError.getCode());
+			}
+		}
+		return user;
+	}
+
+	@DeleteMapping("/{id:\\d+}")
+	public void deleteUser(@PathVariable String id) {
+		System.out.println(id);
 	}
 }

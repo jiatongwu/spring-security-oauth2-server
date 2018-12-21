@@ -1,5 +1,7 @@
 package com.example.sec.controller;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import org.junit.Before;
@@ -56,6 +58,24 @@ public class HelloControllerTest {
 		String result=mockMvc.perform(MockMvcRequestBuilders.post("/user").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
 				.content(content)				
 				).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1)).andReturn().getResponse().getContentAsString();
+		System.out.println(result);
+	}
+	@Test
+	public void whenUpdateSuccess() throws Exception {
+		//Date date=new Date();
+		//long time = date.getTime();
+		Date date=new Date(LocalDateTime.now().plusYears(1l).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+		long time=date.getTime();
+		String content="{\"id\":1,\"username\":\"wu2\",\"password\":null,\"birthday\":"+time+"}";
+		String result=mockMvc.perform(MockMvcRequestBuilders.put("/user/1").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.content(content)				
+				).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1)).andReturn().getResponse().getContentAsString();
+		System.out.println(result);
+	}
+	@Test
+	public void whenDeleteSuccess() throws Exception {		
+		String result=mockMvc.perform(MockMvcRequestBuilders.delete("/user/1")//.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		System.out.println(result);
 	}
 }
