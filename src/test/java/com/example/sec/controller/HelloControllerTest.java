@@ -28,7 +28,21 @@ public class HelloControllerTest {
 
 	@Test
 	public void whenQuerySuccess() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/user").contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-				.param("name", "吴佳同").param("page","10").param("size", "20").param("sort","name,desc")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(3));
+		String result=mockMvc.perform(MockMvcRequestBuilders.get("/user").contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+				.param("name", "吴佳同").param("page","10").param("size", "20").param("sort","name,desc")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(3))
+		.andReturn().getResponse().getContentAsString();
+		System.out.println(result);
+	}
+	@Test
+	public void whenGetInfoSuccess() throws Exception {
+		String result=mockMvc.perform(MockMvcRequestBuilders.get("/user/1")//.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.username").value("tom")).andReturn().getResponse().getContentAsString();
+		System.out.println(result);
+	}
+	@Test
+	public void whenGetInfoFail() throws Exception {
+		String result=mockMvc.perform(MockMvcRequestBuilders.get("/user/a")//.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				).andExpect(MockMvcResultMatchers.status().is4xxClientError()).andReturn().getResponse().getContentAsString();
+		System.out.println(result);
 	}
 }
