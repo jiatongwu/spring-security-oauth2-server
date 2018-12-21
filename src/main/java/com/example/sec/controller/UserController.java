@@ -3,6 +3,7 @@ package com.example.sec.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
@@ -19,8 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.sec.dto.User;
+import com.example.sec.exception.UserNotExistException;
 import com.fasterxml.jackson.annotation.JsonView;
-
+/**
+ * BasicErrorController 默认错误处理方式
+ *
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -40,6 +45,9 @@ public class UserController {
 
 	@GetMapping("/{id:\\d+}")
 	public User user(@PathVariable String id) {
+		if(1==1) {
+			throw new UserNotExistException(Integer.parseInt(id));
+		}
 		User user = new User();
 		user.setUsername("tom");
 		return user;
@@ -47,10 +55,8 @@ public class UserController {
 
 	@PostMapping
 	public User createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
-
 		if (bindingResult.hasErrors()) {
 			List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-
 			for (FieldError fieldError : fieldErrors) {
 				System.out.println(fieldError.getField());
 				System.out.println(fieldError.getDefaultMessage());
@@ -65,15 +71,14 @@ public class UserController {
 	}
 
 	@PutMapping("/{id:\\d+}")
-	public User updateUser(@PathVariable String id, @Valid @RequestBody User user, BindingResult bindingResult) {
-
+	public User updateUser(HttpServletResponse response,@PathVariable String id, @Valid @RequestBody User user, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-
 			for (FieldError fieldError : fieldErrors) {
 				System.out.println(fieldError.getField());
 				System.out.println(fieldError.getDefaultMessage());
 				System.out.println(fieldError.getCode());
+				response.setStatus(401);
 			}
 		}
 		return user;
