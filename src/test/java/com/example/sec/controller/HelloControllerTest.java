@@ -1,5 +1,7 @@
 package com.example.sec.controller;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,6 +45,17 @@ public class HelloControllerTest {
 	public void whenGetInfoFail() throws Exception {
 		String result=mockMvc.perform(MockMvcRequestBuilders.get("/user/a")//.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
 				).andExpect(MockMvcResultMatchers.status().is4xxClientError()).andReturn().getResponse().getContentAsString();
+		System.out.println(result);
+	}
+	
+	@Test
+	public void whenCreateSuccess() throws Exception {
+		Date date=new Date();
+		long time = date.getTime();
+		String content="{\"username\":\"wu\",\"password\":null,\"birthday\":"+time+"}";
+		String result=mockMvc.perform(MockMvcRequestBuilders.post("/user").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.content(content)				
+				).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1)).andReturn().getResponse().getContentAsString();
 		System.out.println(result);
 	}
 }
