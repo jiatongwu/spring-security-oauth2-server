@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.sec.dto.User;
-import com.example.sec.exception.UserNotExistException;
 import com.fasterxml.jackson.annotation.JsonView;
 /**
  * BasicErrorController 默认错误处理方式
@@ -45,14 +44,24 @@ public class UserController {
 
 	@GetMapping("/{id:\\d+}")
 	public User user(@PathVariable String id) {
-		if(1==1) {
-			throw new UserNotExistException(Integer.parseInt(id));
-		}
+		//if(1==1) {
+			//throw new UserNotExistException(Integer.parseInt(id));
+		//}
+		@SuppressWarnings("unused")
 		User user = new User();
 		user.setUsername("tom");
 		return user;
 	}
-
+	@GetMapping("/test")
+	public User usertest(){
+		//if(1==1) {
+			//throw new UserNotExistException(Integer.parseInt(id));
+		//}
+		@SuppressWarnings("unused")
+		User user = new User();
+		user.setUsername("tom");
+		return user;
+	}
 	@PostMapping
 	public User createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
