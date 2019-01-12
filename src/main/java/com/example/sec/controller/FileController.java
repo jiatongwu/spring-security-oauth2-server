@@ -25,16 +25,15 @@ public class FileController {
 	public String uploadFile(MultipartFile file) throws IOException {
 		System.out.println(file.getOriginalFilename());
 		System.out.println(file.getName());
-		String currentPathString = this.getClass().getResource(System.currentTimeMillis() + ".txt").toString();
-		System.out.println(currentPathString);
-		IOUtils.copy(file.getInputStream(), Files.newOutputStream(Paths.get(currentPathString)));
+		String currentPathString = "/Users/wu/tmp/sec/src/main/java/com/example/sec/controller/";
+		IOUtils.copy(file.getInputStream(), Files.newOutputStream(Paths.get(currentPathString+System.currentTimeMillis()+".txt")));
 		return "ok";
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{id:.*}")
 	public void download(@PathVariable String id, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String currentPathString = this.getClass().getResource(System.currentTimeMillis() + ".txt").toString();
-		try(InputStream is=Files.newInputStream(Paths.get(currentPathString));
+		String currentPathString = "/Users/wu/tmp/sec/src/main/java/com/example/sec/controller/";
+		try(InputStream is=Files.newInputStream(Paths.get(currentPathString).resolve(id));
 				OutputStream os=response.getOutputStream();){
 			response.setContentType("application/x-download");
 			 //.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + UriUtils.encode("简易程序.docx", "UTF-8") + "\";\nfilename*=utf-8''" + UriUtils.encode("简易程序.docx", "UTF-8"))
