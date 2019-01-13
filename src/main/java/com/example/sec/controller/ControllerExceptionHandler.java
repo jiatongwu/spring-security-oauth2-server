@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.example.sec.exception.UserNotExistException;
 
+
+/**
+ *BasicErrorController 
+ */
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
