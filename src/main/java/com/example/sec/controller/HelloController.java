@@ -13,12 +13,12 @@ public class HelloController {
 		return "hello,world!";
 	}
 
-	@RequestMapping("/test")
-	public String test(String username) throws IOException {
-		System.out.println(username);
-		
-		return "hello";
-	}
+//	@RequestMapping("/test")
+//	public String test(String username) throws IOException {
+//		System.out.println(username);
+//		
+//		return "hello";
+//	}
 	/**
 	 * http://127.0.0.1:8080/jsonp?callback=hello
 	 * @param username

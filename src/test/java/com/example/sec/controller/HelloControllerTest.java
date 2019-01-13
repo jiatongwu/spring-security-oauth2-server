@@ -73,9 +73,9 @@ public class HelloControllerTest {
 	public void whenUpdateSuccess() throws Exception {
 		//Date date=new Date();
 		//long time = date.getTime();
-		Date date=new Date(LocalDateTime.now().plusYears(1l).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+		Date date=new Date(LocalDateTime.now().minusYears(1l).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 		long time=date.getTime();
-		String content="{\"id\":1,\"username\":\"wu2\",\"password\":null,\"birthday\":"+time+"}";
+		String content="{\"id\":1,\"username\":\"wu2\",\"password\":\"sdf\",\"birthday\":"+time+"}";
 		String result=mockMvc.perform(MockMvcRequestBuilders.put("/user/1").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
 				.content(content)				
 				).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1)).andReturn().getResponse().getContentAsString();
