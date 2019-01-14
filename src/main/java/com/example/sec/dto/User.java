@@ -9,6 +9,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.example.sec.controller.validator.MyConstraint;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class User {
 	public interface UserSimpleView {
 	}
@@ -18,6 +20,7 @@ public class User {
 
 	private Integer id;
 	@MyConstraint(message = "自定义username　validator")
+	@ApiModelProperty("用户名")
 	private String username;
 	@NotBlank(message = "密码不能为空")
 	private String password;

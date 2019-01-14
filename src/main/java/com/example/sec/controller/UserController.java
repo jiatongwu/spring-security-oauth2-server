@@ -21,12 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.sec.dto.User;
 import com.fasterxml.jackson.annotation.JsonView;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 /**
  * BasicErrorController 默认错误处理方式
  *
  */
 @RestController
 @RequestMapping("/user")
+@Api(tags= {"用户接口"})
 public class UserController {
 	@GetMapping
 	@JsonView(User.UserSimpleView.class)
@@ -43,7 +48,8 @@ public class UserController {
 	}
 
 	@GetMapping("/{id:\\d+}")
-	public User user(@PathVariable String id) {
+	@ApiOperation("根据id查询用户")
+	public User user(@ApiParam("用户id")@PathVariable String id) {
 		//if(1==1) {
 			//throw new UserNotExistException(Integer.parseInt(id));
 		//}
@@ -63,6 +69,11 @@ public class UserController {
 		return user;
 	}
 	@PostMapping
+	@ApiOperation("新增用户")
+//	@ApiImplicitParams({ @ApiImplicitParam(name = "anhao", value = "案号"),
+//			@ApiImplicitParam(name = "beginDate", value = "创建时间起始于"),
+//			@ApiImplicitParam(name = "endDate", value = "创建时间结束于"),
+//			@ApiImplicitParam(name = "isCreateTimeAsc", value = "是否按创建时间升序排列,1代表升序0代表降序") })
 	public User createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			List<FieldError> fieldErrors = bindingResult.getFieldErrors();
