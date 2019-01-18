@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.async.DeferredResult;
 @Component
 public class DeferredResultHolder {
+	//private Logger logger=LoggerFactory.getLogger(getClass());
 
 	private Map<String, DeferredResult<String>> deferredResultMap = new HashMap<>();
 

@@ -17,6 +17,7 @@ import com.example.sec.exception.UserNotExistException;
  */
 @ControllerAdvice
 public class ControllerExceptionHandler {
+	//private Logger logger=LoggerFactory.getLogger(getClass());
 
 	@ExceptionHandler(UserNotExistException.class)
 	@ResponseBody

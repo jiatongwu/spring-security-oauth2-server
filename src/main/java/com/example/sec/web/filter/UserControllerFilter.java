@@ -10,6 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 //@Component
 public class UserControllerFilter implements Filter {
+	//private Logger logger=LoggerFactory.getLogger(getClass());
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {

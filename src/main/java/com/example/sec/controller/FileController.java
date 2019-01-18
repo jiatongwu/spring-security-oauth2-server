@@ -21,6 +21,7 @@ import org.springframework.web.util.UriUtils;
 @RestController
 @RequestMapping("/file")
 public class FileController {
+	//private Logger logger=LoggerFactory.getLogger(getClass());
 	@PostMapping
 	public String uploadFile(MultipartFile file) throws IOException {
 		System.out.println(file.getOriginalFilename());

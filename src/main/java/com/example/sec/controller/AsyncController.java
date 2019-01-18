@@ -12,6 +12,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 @RestController
 public class AsyncController {
+	//private Logger logger=LoggerFactory.getLogger(getClass());
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired

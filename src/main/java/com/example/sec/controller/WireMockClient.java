@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import com.github.tomakehurst.wiremock.client.WireMock;
 
 public class WireMockClient {
+	//private Logger logger=LoggerFactory.getLogger(getClass());
 	public static void main(String[] args) throws IOException {
 		WireMock.configureFor("127.0.0.1", 9090);
 		WireMock.removeAllMappings();

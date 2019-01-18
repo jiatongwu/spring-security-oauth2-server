@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class QueueTask {
+	//private Logger logger=LoggerFactory.getLogger(getClass());
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String orderNumber;

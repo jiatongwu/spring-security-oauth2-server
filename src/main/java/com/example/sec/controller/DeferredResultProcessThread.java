@@ -7,8 +7,10 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.async.DeferredResult;
+
 @Component
 public class DeferredResultProcessThread implements ApplicationListener<ContextRefreshedEvent> {
+	// private Logger logger=LoggerFactory.getLogger(getClass());
 	@Autowired
 	private QueueTask queueTask;
 	@Autowired
@@ -17,7 +19,7 @@ public class DeferredResultProcessThread implements ApplicationListener<ContextR
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-		new Thread(new Runnable() {
+		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while (true) {
@@ -40,8 +42,9 @@ public class DeferredResultProcessThread implements ApplicationListener<ContextR
 					}
 				}
 			}
-		}).start();
-
+		});
+		thread.setDaemon(true);
+		thread.start();
 	}
 
 }

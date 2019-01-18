@@ -33,6 +33,7 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping("/user")
 @Api(tags= {"用户接口"})
 public class UserController {
+	//private Logger logger=LoggerFactory.getLogger(getClass());
 	@GetMapping
 	@JsonView(User.UserSimpleView.class)
 	public List<User> user(String name, @PageableDefault(page = 2, size = 10, sort = "age,asc") Pageable pageable) {

@@ -17,7 +17,7 @@ public class User {
 
 	public interface UserDetailView extends UserSimpleView {
 	};
-
+	
 	private Integer id;
 	@MyConstraint(message = "自定义username　validator")
 	@ApiModelProperty("用户名")
@@ -44,7 +44,7 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	@JsonView(UserSimpleView.class)
 	public Integer getId() {
 		return id;
 	}
