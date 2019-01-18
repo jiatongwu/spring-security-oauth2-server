@@ -27,7 +27,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		logger.debug("用户" + username + " loadUserByUsername");
 		UserDetails userDetails = new User("wu", passwordEncoder.encode("1234567"), true, true, true, true,
-				AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+				AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ACTUATOR"));
 		return userDetails;
 	}
 

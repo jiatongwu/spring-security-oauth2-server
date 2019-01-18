@@ -31,7 +31,7 @@ public class SecurityLoginController {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private ObjectMapper objectMapper;
-
+	
 	private RequestCache requestCache = new HttpSessionRequestCache();
 
 	// private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();

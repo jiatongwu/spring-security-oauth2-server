@@ -7,6 +7,14 @@ public class MyProperties {
 	
 	
 	private String my01;
+	private LoginType loginType;
+	
+	public LoginType getLoginType() {
+		return loginType;
+	}
+	public void setLoginType(LoginType loginType) {
+		this.loginType = loginType;
+	}
 	private BrowerProperties brower=new BrowerProperties();
 	public String getMy01() {
 		return my01;
