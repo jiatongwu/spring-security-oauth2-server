@@ -20,7 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// http.httpBasic()
 		http.formLogin().loginPage("/login.do").loginProcessingUrl("/doLogin").and().authorizeRequests()
-				.antMatchers("/login.do").permitAll().anyRequest().authenticated().and().csrf().disable();
+				.antMatchers("/login.do","/testAjax/*").permitAll().anyRequest().authenticated().and().csrf().disable();
 	}
 
 }

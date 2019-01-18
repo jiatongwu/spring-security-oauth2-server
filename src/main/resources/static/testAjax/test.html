@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="vue2.4.0.js"></script>
+<script src="jquery2.2.4.js"></script>
+<script src="vue-resource-1.5.1.min.js"></script>
+</head>
+<body>
+	test.html
+	<hr />
+	<div id="app">
+		<input type="button" @click="getUser" value="请求/user接口"/> <br/>
+	</div>
+	<script>
+		var vm = new Vue({
+			el : "#app",
+			data : {},
+			methods : {
+				getUser : function() {
+					//发送get请求
+					this.$http.get('http://localhost:8080/user', { params: { parentId: "root" } }).then(function (res) {
+                        console.log(res);
+                    }, function () {
+                        console.log('请求失败处理');
+                    });
+				}
+			}
+		});
+	</script>
+</body>
+
+</html>
