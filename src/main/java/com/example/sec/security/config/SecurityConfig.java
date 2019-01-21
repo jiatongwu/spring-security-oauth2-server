@@ -3,6 +3,7 @@ package com.example.sec.security.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -57,9 +58,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// 退出配置
 				.logout().logoutUrl("/logout")
 				// .logoutSuccessUrl("")
-				.logoutSuccessHandler(myLogoutSuccessHandler).deleteCookies("JSESSIONID").and().authorizeRequests()
-				.antMatchers(loginPage, "/testAjax/*", "/sessionInvalid").permitAll().anyRequest().authenticated().and()
-				.csrf().disable();
+				.logoutSuccessHandler(myLogoutSuccessHandler).deleteCookies("JSESSIONID").and()
+				//配置授权
+				.authorizeRequests()
+				.antMatchers(loginPage, "/testAjax/*", "/sessionInvalid").permitAll()
+				//简单角色授权方式
+				.antMatchers(HttpMethod.GET,"/user").hasRole("USER")
+				.anyRequest().authenticated().and().csrf().disable();
 	}
 
 }
