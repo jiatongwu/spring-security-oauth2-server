@@ -32,7 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private MySessionInformationExpiredStrategy mySessionInformationExpiredStrategy;
 	@Autowired
 	private MySessionInvalidSessionStrategy mySessionInvalidSessionStrategy;
-	
+	@Autowired
+	private MyLogoutSuccessHandler myLogoutSuccessHandler;
 	private String loginPage = "/login.do";
 
 	@Bean
@@ -50,12 +51,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.successHandler(myAuthenticationSuccessHandler).failureHandler(myAuthenticationFailureHandler).and()
 				// session配置
 				.sessionManagement()
-				//.invalidSessionUrl("/sessionInvalid")
-				.invalidSessionStrategy(mySessionInvalidSessionStrategy)
-				.maximumSessions(1)
+				// .invalidSessionUrl("/sessionInvalid")
+				.invalidSessionStrategy(mySessionInvalidSessionStrategy).maximumSessions(1)
 				.maxSessionsPreventsLogin(false).expiredSessionStrategy(mySessionInformationExpiredStrategy).and().and()
-				.authorizeRequests().antMatchers(loginPage, "/testAjax/*", "/sessionInvalid").permitAll().anyRequest()
-				.authenticated().and().csrf().disable();
+				// 退出配置
+				.logout().logoutUrl("/logout")
+				// .logoutSuccessUrl("")
+				.logoutSuccessHandler(myLogoutSuccessHandler).deleteCookies("JSESSIONID").and().authorizeRequests()
+				.antMatchers(loginPage, "/testAjax/*", "/sessionInvalid").permitAll().anyRequest().authenticated().and()
+				.csrf().disable();
 	}
 
 }
