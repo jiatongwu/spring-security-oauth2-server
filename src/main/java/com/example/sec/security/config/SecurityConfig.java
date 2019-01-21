@@ -10,11 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * UsernamePasswordAuthenticationFilter -> AuthenticationManager
- * 管理AuthenticationProvider -> AuthenticationProvider（DaoAuthenticationProvider） -> AbstractUserDetailsAuthenticationProvider -> 
+ * 管理AuthenticationProvider -> AuthenticationProvider（DaoAuthenticationProvider）
+ * -> AbstractUserDetailsAuthenticationProvider ->
  * 
  * 
- * **访问的是否是登录的接口**
- * SecurityContextPersistenceFilter -> SecurityContextHolder -> SecurityContext
+ * **访问的是否是登录的接口** SecurityContextPersistenceFilter -> SecurityContextHolder ->
+ * SecurityContext
  * 
  * Authentication 接口有不同的实现类 不同的AuthenticationProvider 支持不同的Authentication
  * 
@@ -27,6 +28,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
 	@Autowired
 	private MyAuthenticationFailureHandler myAuthenticationFailureHandler;
+	@Autowired
+	private MySessionInformationExpiredStrategy mySessionInformationExpiredStrategy;
+	@Autowired
+	private MySessionInvalidSessionStrategy mySessionInvalidSessionStrategy;
+	
 	private String loginPage = "/login.do";
 
 	@Bean
@@ -42,8 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// http.httpBasic()
 		http.formLogin().loginPage(loginPage).loginProcessingUrl("/doLogin")
 				.successHandler(myAuthenticationSuccessHandler).failureHandler(myAuthenticationFailureHandler).and()
-				.authorizeRequests().antMatchers(loginPage, "/testAjax/*").permitAll().anyRequest().authenticated()
-				.and().csrf().disable();
+				// session配置
+				.sessionManagement()
+				//.invalidSessionUrl("/sessionInvalid")
+				.invalidSessionStrategy(mySessionInvalidSessionStrategy)
+				.maximumSessions(1)
+				.maxSessionsPreventsLogin(false).expiredSessionStrategy(mySessionInformationExpiredStrategy).and().and()
+				.authorizeRequests().antMatchers(loginPage, "/testAjax/*", "/sessionInvalid").permitAll().anyRequest()
+				.authenticated().and().csrf().disable();
 	}
 
 }

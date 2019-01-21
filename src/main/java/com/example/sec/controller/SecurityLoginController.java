@@ -31,7 +31,7 @@ public class SecurityLoginController {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private ObjectMapper objectMapper;
-	
+
 	private RequestCache requestCache = new HttpSessionRequestCache();
 
 	// private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -77,5 +77,13 @@ public class SecurityLoginController {
 		// public String toLogin(Authentication authentication) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return objectMapper.writeValueAsString(authentication);
+	}
+
+	@GetMapping("/sessionInvalid")
+	@ResponseBody
+	public String sessionInvalid() throws JsonProcessingException {
+		// public String toLogin(Authentication authentication) {
+
+		return "{\"message\":\"session失效\"}";
 	}
 }
