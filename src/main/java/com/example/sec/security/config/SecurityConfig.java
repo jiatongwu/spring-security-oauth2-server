@@ -62,9 +62,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				//配置授权
 				.authorizeRequests()
 				.antMatchers(loginPage, "/testAjax/*", "/sessionInvalid").permitAll()
+				//权限表达式 
+				//授权过程分析　未进行身份认证的用户会经过AnonymousAuthenticationFilter生成一个AnonymousAuthentication　拿到securityConfig中的configAttribute,Authentication中的角色和权限信息，当前请求的request信息
+				//通过FilterSecurityInterceptor中AccessDecisionManager实现类　使用多个投票器AccessDecisionVoter进行投票
+				//AccessDecisionManager有不同的实现类　根据投票器的投票结果来决定是否通过　不同的实现类通过方式不同
+				//AccessDecisionVoter 实现类是WebExpressionVoter
+				.antMatchers("/user/*").access("hasRole('USER') and hasRole('ADMIN')")
 				//简单角色授权方式
 				.antMatchers(HttpMethod.GET,"/user").hasRole("USER")
 				.anyRequest().authenticated().and().csrf().disable();
 	}
+	
 
 }
