@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MimeTypeUtils;
 @Component
 public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
-	
+	//	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Override
 	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException, ServletException {

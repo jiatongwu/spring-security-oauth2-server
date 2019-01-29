@@ -8,18 +8,23 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import com.example.sec.util.RandomStringUtil;
 import com.google.code.kaptcha.Producer;
 
 @RestController
 public class CaptchaController {
+		private Logger logger = LoggerFactory.getLogger(getClass());
 
 	public static final String SESSION_IMAGECODE_KEY = "session_imagecode_key";
+	public static final String SESSION_SMSCODE_KEY = "session_smscode_key";
 	@Resource
 	private Producer captchaProducer;
 
@@ -48,5 +53,20 @@ public class CaptchaController {
 		}
 		return;
 	}
-
+	/**
+	 * 发送短信验证码
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@GetMapping(value = "/smsCode")
+	public String smsCode(HttpServletRequest request, HttpServletResponse response,String mobile) throws Exception {
+		//生成随机数
+		String randomNumber = RandomStringUtil.getNumber(6);
+		logger.debug(mobile+"短信验证码是"+randomNumber);
+		//通过短信提供商发送短信给mobile手机号
+		//放到session中
+		sessionStrategy.setAttribute(new ServletWebRequest(request), SESSION_SMSCODE_KEY, randomNumber);		
+		return "ok";
+	}
 }

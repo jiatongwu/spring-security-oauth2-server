@@ -2,6 +2,8 @@ package com.example.sec.security.config;
 
 import java.util.Properties;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import com.google.code.kaptcha.Producer;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -47,6 +52,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private MyAccessDenyHandler myAccessDenyHandler;
 	@Autowired
 	private MyImageCodeFilterBean myImageCodeFilterBean;
+	@Autowired
+	private MySmsCodeValidateFilterBean mySmsCodeValidateFilterBean;
+	@Autowired
+	private MyUserDetailsService myUserDetailsService;
+	@Autowired
+	private DataSource dataSource;
+	@Autowired
+	private PersistentTokenRepository persistentTokenRepository;
+	
+	//短信验证码登录的配置类
+	@Autowired
+	private SmsCodeSecurityConfigBean smsCodeSecurityConfigBean;
+	
 	
 	private String loginPage = "/login.do";
 
@@ -57,8 +75,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		myAuthenticationFailureHandler.setDefaultFailureUrl(loginPage + "?error");
 
 		// http.httpBasic()
-		http.addFilterBefore(myImageCodeFilterBean, UsernamePasswordAuthenticationFilter.class).formLogin().loginPage(loginPage).loginProcessingUrl("/doLogin")
-				.successHandler(myAuthenticationSuccessHandler).failureHandler(myAuthenticationFailureHandler).and()
+		http.addFilterBefore(mySmsCodeValidateFilterBean, AbstractPreAuthenticatedProcessingFilter.class).addFilterBefore(myImageCodeFilterBean, UsernamePasswordAuthenticationFilter.class).formLogin().loginPage(loginPage).loginProcessingUrl("/doLogin")
+				.successHandler(myAuthenticationSuccessHandler).failureHandler(myAuthenticationFailureHandler)
+				//短信验证码登录的配置类
+				.and()
+				.apply(smsCodeSecurityConfigBean)
+				//记住我功能
+				.and()
+				.rememberMe()
+				.tokenRepository(persistentTokenRepository)
+				.tokenValiditySeconds(86400)
+				.userDetailsService(myUserDetailsService)
+				.and()
 				// session配置
 				.sessionManagement()
 				// .invalidSessionUrl("/sessionInvalid")
@@ -71,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// 配置授权
 				.authorizeRequests()
 				//不需要认证就能访问
-				.antMatchers(loginPage, "/testAjax/*", "/sessionInvalid","/captchaImage").permitAll()
+				.antMatchers(loginPage, "/testAjax/*", "/sessionInvalid","/captchaImage","/smsCode","/hello").permitAll()
 				// 权限表达式
 				// 授权过程分析 未进行身份认证的用户会经过AnonymousAuthenticationFilter生成一个AnonymousAuthentication
 				// 拿到securityConfig中的configAttribute,Authentication中的角色和权限信息，当前请求的request信息
@@ -86,7 +114,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET, "/user").hasRole("ADMIN").anyRequest().authenticated().and().csrf()
 				.disable()
 				// 403 无权限返回json
-				.exceptionHandling().accessDeniedHandler(myAccessDenyHandler);
+				.exceptionHandling().accessDeniedHandler(myAccessDenyHandler)
+				;
 	}
 	
 	
@@ -94,6 +123,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl jdbcTokenRepositoryImpl=new JdbcTokenRepositoryImpl();
+		//jdbcTokenRepositoryImpl.setCreateTableOnStartup(true);
+		jdbcTokenRepositoryImpl.setDataSource(dataSource);
+		return jdbcTokenRepositoryImpl;
 	}
 	
 	@Bean

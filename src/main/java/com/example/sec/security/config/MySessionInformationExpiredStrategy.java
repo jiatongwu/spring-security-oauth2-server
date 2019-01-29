@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MimeTypeUtils;
 @Component
 public class MySessionInformationExpiredStrategy implements SessionInformationExpiredStrategy{
+	//	private Logger logger = LoggerFactory.getLogger(getClass());
 	//private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 	@Override
 	public void onExpiredSessionDetected(SessionInformationExpiredEvent event) throws IOException, ServletException {

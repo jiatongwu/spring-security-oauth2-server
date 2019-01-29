@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MimeTypeUtils;
 @Component
 public class MyAccessDenyHandler implements AccessDeniedHandler {
-
+	//	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {

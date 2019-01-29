@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MyRbacService {
+	//	private Logger logger = LoggerFactory.getLogger(getClass());
 	//private AntPathMatcher antPathMatcher=new AntPathMatcher();
 	public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
 		//antPathMatcher.match(url, request.getRequestURI())

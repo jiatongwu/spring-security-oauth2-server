@@ -12,6 +12,7 @@ import org.springframework.util.MimeTypeUtils;
 
 @Component
 public class MySessionInvalidSessionStrategy implements InvalidSessionStrategy {
+	//	private Logger logger = LoggerFactory.getLogger(getClass());
 	//private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
 	@Override
