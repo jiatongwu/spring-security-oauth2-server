@@ -18,11 +18,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.ServletWebRequest;
 
+import com.example.sec.dto.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,6 +38,26 @@ public class SecurityLoginController {
 	private ObjectMapper objectMapper;
 
 	private RequestCache requestCache = new HttpSessionRequestCache();
+	@Autowired
+	private ProviderSignInUtils providerSignInUtils;
+	
+	@PostMapping("/regist")
+	public void regist(User user, HttpServletRequest request) {
+		
+		//不管是注册用户还是绑定用户，都会拿到一个用户唯一标识。
+		String userId = user.getUsername();
+		providerSignInUtils.doPostSignUp(userId, new ServletWebRequest(request));
+	}
+	@GetMapping("/social/user")
+	public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
+		SocialUserInfo userInfo = new SocialUserInfo();
+		Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
+		userInfo.setProviderId(connection.getKey().getProviderId());
+		userInfo.setProviderUserId(connection.getKey().getProviderUserId());
+		userInfo.setNickname(connection.getDisplayName());
+		userInfo.setHeadimg(connection.getImageUrl());
+		return userInfo;
+	}
 
 	// private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 	/**

@@ -41,7 +41,7 @@ login.jsp
 	</form>
 	<br>
 	<h3>社交登录</h3>
-	<a href="/qqLogin/callback.do">QQ登录</a>
+	<a href="/auth/qq">QQ登录</a>
 	&nbsp;&nbsp;&nbsp;&nbsp;
 	<a href="/qqLogin/weixin">微信登录</a>
 

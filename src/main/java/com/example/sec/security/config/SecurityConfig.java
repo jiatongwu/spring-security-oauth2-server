@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 import com.google.code.kaptcha.Producer;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -66,6 +67,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private SmsCodeSecurityConfigBean smsCodeSecurityConfigBean;
 	
 	
+	//spring social 配置过虑器
+	@Autowired
+	private SpringSocialConfigurer springSocialConfigurer;
+	
+	
 	private String loginPage = "/login.do";
 
 	
@@ -78,6 +84,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(mySmsCodeValidateFilterBean, AbstractPreAuthenticatedProcessingFilter.class).addFilterBefore(myImageCodeFilterBean, UsernamePasswordAuthenticationFilter.class).formLogin().loginPage(loginPage).loginProcessingUrl("/doLogin")
 				.successHandler(myAuthenticationSuccessHandler).failureHandler(myAuthenticationFailureHandler)
 				//短信验证码登录的配置类
+				.and()
+				//spring social 配置filter
+				.apply(springSocialConfigurer)
 				.and()
 				.apply(smsCodeSecurityConfigBean)
 				//记住我功能
@@ -99,7 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// 配置授权
 				.authorizeRequests()
 				//不需要认证就能访问
-				.antMatchers(loginPage, "/testAjax/*", "/sessionInvalid","/captchaImage","/smsCode","/hello").permitAll()
+				.antMatchers(loginPage, "/testAjax/*", "/sessionInvalid","/captchaImage","/smsCode","/hello","/regist","/register.html").permitAll()
 				// 权限表达式
 				// 授权过程分析 未进行身份认证的用户会经过AnonymousAuthenticationFilter生成一个AnonymousAuthentication
 				// 拿到securityConfig中的configAttribute,Authentication中的角色和权限信息，当前请求的request信息
